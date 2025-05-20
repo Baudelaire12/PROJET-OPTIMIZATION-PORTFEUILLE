@@ -114,13 +114,23 @@ def collect_real_data():
                 all_data_reset.to_csv('data/raw/stock_data.csv', index=False)
 
                 # Prétraiter les données
-                # Pivoter les données pour avoir les tickers en colonnes
-                # Vérifier si 'Date' est une colonne ou un index
-                if 'Date' in all_data.columns:
-                    pivot_data = all_data.pivot(index='Date', columns='Ticker', values='Close')
-                else:
-                    # Si 'Date' est l'index, on peut utiliser unstack directement
-                    pivot_data = all_data['Close'].unstack('Ticker')
+                # Créer un DataFrame pivot manuellement
+                # Réinitialiser l'index pour avoir Date comme colonne
+                if 'Date' not in all_data.columns and isinstance(all_data.index, pd.DatetimeIndex):
+                    all_data = all_data.reset_index()
+
+                # Créer un dictionnaire pour stocker les séries de prix par ticker
+                prices_dict = {}
+
+                # Parcourir les tickers uniques
+                for ticker in all_data['Ticker'].unique():
+                    # Filtrer les données pour ce ticker
+                    ticker_data = all_data[all_data['Ticker'] == ticker]
+                    # Créer une série avec Date comme index et Close comme valeurs
+                    prices_dict[ticker] = pd.Series(ticker_data['Close'].values, index=ticker_data['Date'])
+
+                # Créer un DataFrame à partir du dictionnaire
+                pivot_data = pd.DataFrame(prices_dict)
 
                 # Calculer les rendements journaliers
                 returns = pivot_data.pct_change().dropna()
