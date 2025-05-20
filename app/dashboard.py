@@ -75,8 +75,47 @@ def load_data():
         returns = pd.read_csv('data/processed/returns.csv', index_col=0, parse_dates=True)
         return prices, returns
     except FileNotFoundError:
-        st.error("Données non trouvées. Veuillez d'abord exécuter le script de génération de données.")
-        return None, None
+        st.warning("Données réelles non trouvées. Génération de données simulées pour la démonstration...")
+
+        # Générer des données simulées
+        np.random.seed(42)
+
+        # Créer des dates
+        dates = pd.date_range(start='2020-01-01', end='2023-12-31', freq='B')
+
+        # Liste des tickers
+        tickers = ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'META', 'TSLA', 'NVDA', 'JPM', 'V', 'PG']
+
+        # Générer des prix simulés
+        prices_data = {}
+        for ticker in tickers:
+            # Prix initial aléatoire entre 50 et 500
+            initial_price = np.random.uniform(50, 500)
+
+            # Générer des rendements journaliers avec une tendance haussière
+            daily_returns = np.random.normal(0.0005, 0.015, size=len(dates))
+
+            # Calculer les prix cumulatifs
+            price_series = initial_price * (1 + daily_returns).cumprod()
+
+            prices_data[ticker] = price_series
+
+        # Créer un DataFrame de prix
+        prices = pd.DataFrame(prices_data, index=dates)
+
+        # Calculer les rendements
+        returns = prices.pct_change().dropna()
+
+        # Créer les répertoires si nécessaires
+        os.makedirs('data/raw', exist_ok=True)
+        os.makedirs('data/processed', exist_ok=True)
+
+        # Sauvegarder les données simulées
+        prices.to_csv('data/raw/stock_prices.csv')
+        returns.to_csv('data/processed/returns.csv')
+
+        st.success("Données simulées générées avec succès pour la démonstration!")
+        return prices, returns
 
 prices, returns = load_data()
 
@@ -257,4 +296,4 @@ if prices is not None and returns is not None:
     )
 
 else:
-    st.error("Impossible de charger les données. Veuillez exécuter le script de génération de données.")
+    st.error("Impossible de charger ou de générer les données. Veuillez vérifier les permissions d'écriture dans le répertoire 'data'.")
