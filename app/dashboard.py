@@ -59,7 +59,35 @@ st.sidebar.header("Paramètres")
 @st.cache_data
 def load_data():
     try:
-        # Essayer de charger les données réelles
+        # Essayer de charger les données réelles depuis stock_data.csv (collectées par streamlit_app.py)
+        try:
+            stock_data = pd.read_csv('data/raw/stock_data.csv')
+            if 'Date' in stock_data.columns and 'Ticker' in stock_data.columns and 'Close' in stock_data.columns:
+                # Créer un dictionnaire pour stocker les séries de prix par ticker
+                prices_dict = {}
+
+                # Convertir la colonne Date en datetime
+                stock_data['Date'] = pd.to_datetime(stock_data['Date'])
+
+                # Parcourir les tickers uniques
+                for ticker in stock_data['Ticker'].unique():
+                    # Filtrer les données pour ce ticker
+                    ticker_data = stock_data[stock_data['Ticker'] == ticker]
+                    # Créer une série avec Date comme index et Close comme valeurs
+                    prices_dict[ticker] = pd.Series(ticker_data['Close'].values, index=ticker_data['Date'])
+
+                # Créer un DataFrame à partir du dictionnaire
+                prices = pd.DataFrame(prices_dict)
+
+                # Charger les rendements calculés
+                returns = pd.read_csv('data/processed/returns.csv', index_col=0, parse_dates=True)
+
+                st.success("Données réelles chargées avec succès!")
+                return prices, returns
+        except Exception as e:
+            st.warning(f"Erreur lors du chargement des données réelles: {e}")
+
+        # Si les données réelles ne sont pas disponibles, essayer de charger les données simulées
         prices = pd.read_csv('data/raw/stock_prices.csv', index_col=0, parse_dates=True)
         returns = pd.read_csv('data/processed/returns.csv', index_col=0, parse_dates=True)
         return prices, returns
@@ -71,71 +99,22 @@ prices, returns = load_data()
 
 # Sélection des actifs
 # Utiliser les colonnes disponibles dans le DataFrame returns
-available_tickers = list(returns.columns)
-default_tickers = available_tickers
-selected_tickers = st.sidebar.multiselect(
-    "Sélectionner les actifs",
-    options=available_tickers,
-    default=available_tickers[:5] if len(available_tickers) >= 5 else available_tickers
-)
+if returns is not None:
+    available_tickers = list(returns.columns)
+    default_tickers = available_tickers
+    selected_tickers = st.sidebar.multiselect(
+        "Sélectionner les actifs",
+        options=available_tickers,
+        default=available_tickers[:5] if len(available_tickers) >= 5 else available_tickers
+    )
 
-# Paramètres d'optimisation
-st.sidebar.subheader("Paramètres d'optimisation")
-risk_free_rate = st.sidebar.slider("Taux sans risque (%)", 0.0, 5.0, 1.0) / 100
-n_portfolios = st.sidebar.slider("Nombre de portefeuilles à simuler", 1000, 10000, 5000)
-
-# Chargement des données
-@st.cache_data
-def load_data():
-    try:
-        # Essayer de charger les données réelles
-        prices = pd.read_csv('data/raw/stock_prices.csv', index_col=0, parse_dates=True)
-        returns = pd.read_csv('data/processed/returns.csv', index_col=0, parse_dates=True)
-        return prices, returns
-    except FileNotFoundError:
-        st.warning("Données réelles non trouvées. Génération de données simulées pour la démonstration...")
-
-        # Générer des données simulées
-        np.random.seed(42)
-
-        # Créer des dates
-        dates = pd.date_range(start='2020-01-01', end='2023-12-31', freq='B')
-
-        # Liste des tickers
-        tickers = ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'META', 'TSLA', 'NVDA', 'JPM', 'V', 'PG']
-
-        # Générer des prix simulés
-        prices_data = {}
-        for ticker in tickers:
-            # Prix initial aléatoire entre 50 et 500
-            initial_price = np.random.uniform(50, 500)
-
-            # Générer des rendements journaliers avec une tendance haussière
-            daily_returns = np.random.normal(0.0005, 0.015, size=len(dates))
-
-            # Calculer les prix cumulatifs
-            price_series = initial_price * (1 + daily_returns).cumprod()
-
-            prices_data[ticker] = price_series
-
-        # Créer un DataFrame de prix
-        prices = pd.DataFrame(prices_data, index=dates)
-
-        # Calculer les rendements
-        returns = prices.pct_change().dropna()
-
-        # Créer les répertoires si nécessaires
-        os.makedirs('data/raw', exist_ok=True)
-        os.makedirs('data/processed', exist_ok=True)
-
-        # Sauvegarder les données simulées
-        prices.to_csv('data/raw/stock_prices.csv')
-        returns.to_csv('data/processed/returns.csv')
-
-        st.success("Données simulées générées avec succès pour la démonstration!")
-        return prices, returns
-
-prices, returns = load_data()
+    # Paramètres d'optimisation
+    st.sidebar.subheader("Paramètres d'optimisation")
+    risk_free_rate = st.sidebar.slider("Taux sans risque (%)", 0.0, 5.0, 1.0) / 100
+    n_portfolios = st.sidebar.slider("Nombre de portefeuilles à simuler", 1000, 10000, 5000)
+else:
+    st.error("Impossible de charger les données. Veuillez exécuter le script de collecte de données.")
+    st.stop()
 
 if prices is not None and returns is not None:
     # Filtrer les données pour les actifs sélectionnés
