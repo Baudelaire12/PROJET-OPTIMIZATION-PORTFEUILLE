@@ -55,12 +55,28 @@ with st.expander("ℹ️ Informations sur les données"):
 # Sidebar pour les paramètres
 st.sidebar.header("Paramètres")
 
+# Chargement des données
+@st.cache_data
+def load_data():
+    try:
+        # Essayer de charger les données réelles
+        prices = pd.read_csv('data/raw/stock_prices.csv', index_col=0, parse_dates=True)
+        returns = pd.read_csv('data/processed/returns.csv', index_col=0, parse_dates=True)
+        return prices, returns
+    except FileNotFoundError:
+        st.error("Données non trouvées. Veuillez d'abord exécuter le script de collecte de données.")
+        return None, None
+
+prices, returns = load_data()
+
 # Sélection des actifs
-default_tickers = ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'META', 'TSLA', 'NVDA', 'JPM', 'V', 'PG']
+# Utiliser les colonnes disponibles dans le DataFrame returns
+available_tickers = list(returns.columns)
+default_tickers = available_tickers
 selected_tickers = st.sidebar.multiselect(
     "Sélectionner les actifs",
-    options=default_tickers,
-    default=default_tickers[:5]
+    options=available_tickers,
+    default=available_tickers[:5] if len(available_tickers) >= 5 else available_tickers
 )
 
 # Paramètres d'optimisation
