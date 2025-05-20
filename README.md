@@ -181,4 +181,4 @@ python -m src.models.backtest
 Ce projet est sous licence MIT.
 
 ## Contact
-Pour toute question ou suggestion, veuillez contacter [votre-email@example.com].
+Pour toute question ou suggestion, veuillez contacter [tpineldahoui@gmail.com].
