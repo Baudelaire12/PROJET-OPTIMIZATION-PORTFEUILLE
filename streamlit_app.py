@@ -156,7 +156,19 @@ if data_ready:
     # Ajouter le répertoire de l'application au chemin
     sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), 'app')))
 
+    # Afficher un message de transition
+    st.success("Données collectées avec succès! Chargement du dashboard d'optimisation...")
+
+    # Créer une séparation visuelle
+    st.markdown("---")
+
     # Importer et exécuter l'application principale
-    import dashboard
+    try:
+        import dashboard
+        st.success("Dashboard chargé avec succès!")
+    except Exception as e:
+        st.error(f"Erreur lors du chargement du dashboard: {e}")
+        st.error("Détails de l'erreur:")
+        st.exception(e)
 else:
     st.error("Impossible de continuer sans données. Veuillez réessayer la collecte de données.")

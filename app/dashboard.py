@@ -56,41 +56,46 @@ with st.expander("ℹ️ Informations sur les données"):
 st.sidebar.header("Paramètres")
 
 # Chargement des données
-@st.cache_data
+@st.cache_data(show_spinner=False)
 def load_data():
     try:
         # Essayer de charger les données réelles depuis stock_data.csv (collectées par streamlit_app.py)
         try:
-            stock_data = pd.read_csv('data/raw/stock_data.csv')
-            if 'Date' in stock_data.columns and 'Ticker' in stock_data.columns and 'Close' in stock_data.columns:
-                # Créer un dictionnaire pour stocker les séries de prix par ticker
-                prices_dict = {}
+            # Afficher un message de chargement
+            with st.spinner("Chargement des données réelles..."):
+                stock_data = pd.read_csv('data/raw/stock_data.csv')
+                if 'Date' in stock_data.columns and 'Ticker' in stock_data.columns and 'Close' in stock_data.columns:
+                    # Créer un dictionnaire pour stocker les séries de prix par ticker
+                    prices_dict = {}
 
-                # Convertir la colonne Date en datetime
-                stock_data['Date'] = pd.to_datetime(stock_data['Date'])
+                    # Convertir la colonne Date en datetime
+                    stock_data['Date'] = pd.to_datetime(stock_data['Date'], utc=True)
 
-                # Parcourir les tickers uniques
-                for ticker in stock_data['Ticker'].unique():
-                    # Filtrer les données pour ce ticker
-                    ticker_data = stock_data[stock_data['Ticker'] == ticker]
-                    # Créer une série avec Date comme index et Close comme valeurs
-                    prices_dict[ticker] = pd.Series(ticker_data['Close'].values, index=ticker_data['Date'])
+                    # Parcourir les tickers uniques
+                    for ticker in stock_data['Ticker'].unique():
+                        # Filtrer les données pour ce ticker
+                        ticker_data = stock_data[stock_data['Ticker'] == ticker]
+                        # Créer une série avec Date comme index et Close comme valeurs
+                        prices_dict[ticker] = pd.Series(ticker_data['Close'].values, index=ticker_data['Date'])
 
-                # Créer un DataFrame à partir du dictionnaire
-                prices = pd.DataFrame(prices_dict)
+                    # Créer un DataFrame à partir du dictionnaire
+                    prices = pd.DataFrame(prices_dict)
 
-                # Charger les rendements calculés
-                returns = pd.read_csv('data/processed/returns.csv', index_col=0, parse_dates=True)
+                    # Charger les rendements calculés
+                    returns = pd.read_csv('data/processed/returns.csv', index_col=0, parse_dates=True)
 
-                st.success("Données réelles chargées avec succès!")
-                return prices, returns
+                    st.success("Données réelles chargées avec succès!")
+                    return prices, returns
         except Exception as e:
             st.warning(f"Erreur lors du chargement des données réelles: {e}")
+            st.exception(e)
 
         # Si les données réelles ne sont pas disponibles, essayer de charger les données simulées
-        prices = pd.read_csv('data/raw/stock_prices.csv', index_col=0, parse_dates=True)
-        returns = pd.read_csv('data/processed/returns.csv', index_col=0, parse_dates=True)
-        return prices, returns
+        with st.spinner("Chargement des données simulées..."):
+            prices = pd.read_csv('data/raw/stock_prices.csv', index_col=0, parse_dates=True)
+            returns = pd.read_csv('data/processed/returns.csv', index_col=0, parse_dates=True)
+            st.info("Utilisation de données simulées (les données réelles n'ont pas pu être chargées).")
+            return prices, returns
     except FileNotFoundError:
         st.error("Données non trouvées. Veuillez d'abord exécuter le script de collecte de données.")
         return None, None
