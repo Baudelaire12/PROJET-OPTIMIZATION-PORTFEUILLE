@@ -17,6 +17,11 @@ Ce projet optimise un portefeuille d'investissement en combinant la Théorie Mod
 - Génération de données simulées pour les tests
 - Pipeline modulaire avec différents modes d'exécution
 - Gestion robuste des erreurs et des données manquantes
+- Documentation technique complète avec Sphinx
+- Tests unitaires avec pytest et couverture de code
+- Déploiement simplifié avec Docker Compose
+- Outils d'analyse de code (flake8, black)
+- Guide utilisateur détaillé
 
 ## Structure du Projet
 ```
@@ -66,8 +71,8 @@ portfolio_optimization/
 ## Installation
 1. Clonez le dépôt :
    ```bash
-   git clone https://github.com/votre-utilisateur/portfolio_optimization.git
-   cd portfolio_optimization
+   git clone https://github.com/Baudelaire12/PROJET-OPTIMIZATION-PORTFEUILLE.git
+   cd PROJET-OPTIMIZATION-PORTFEUILLE
    ```
 
 2. Créez un environnement virtuel :
@@ -82,6 +87,11 @@ portfolio_optimization/
 3. Installez les dépendances :
    ```bash
    pip install -r requirements.txt
+   ```
+
+4. Pour le développement, installez les dépendances supplémentaires :
+   ```bash
+   pip install -r requirements-dev.txt
    ```
 
 ## Utilisation
@@ -176,6 +186,16 @@ python -m src.models.backtest
    ```bash
    docker run -p 8501:8501 portfolio-optimization
    ```
+
+3. Ou utilisez Docker Compose pour lancer tous les services :
+   ```bash
+   docker-compose up -d
+   ```
+
+   Cela lancera trois services :
+   - **app** : Application Streamlit (http://localhost:8501)
+   - **jupyter** : Serveur Jupyter Notebook (http://localhost:8888)
+   - **docs** : Documentation Sphinx (http://localhost:8000)
 
 ## Licence
 Ce projet est sous licence MIT.
