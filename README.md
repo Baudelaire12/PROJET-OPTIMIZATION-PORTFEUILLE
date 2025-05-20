@@ -1,5 +1,8 @@
 # Optimisation de Portefeuille d'Investissement
 
+[![Portfolio Optimization CI](https://github.com/Baudelaire12/PROJET-OPTIMIZATION-PORTFEUILLE/actions/workflows/python-app.yml/badge.svg)](https://github.com/Baudelaire12/PROJET-OPTIMIZATION-PORTFEUILLE/actions/workflows/python-app.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 ## Description
 Ce projet optimise un portefeuille d'investissement en combinant la Théorie Moderne du Portefeuille (MPT) et des modèles d'apprentissage automatique. Il utilise des données historiques de Yahoo Finance pour prédire les rendements et minimiser les risques.
 
