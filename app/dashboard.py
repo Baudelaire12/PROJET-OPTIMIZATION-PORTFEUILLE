@@ -43,11 +43,13 @@ with st.expander("ℹ️ Informations sur les données"):
     - Supprimer les valeurs aberrantes
     - Gérer les valeurs manquantes
 
-    ### Mise à jour des données
-    Pour mettre à jour les données avec les dernières informations du marché, exécutez :
-    ```bash
-    python collect_real_data.py
-    ```
+    ### Collecte de données réelles
+    Vous pouvez collecter des données réelles directement depuis cette application :
+    1. Utilisez le panneau "Collecte de données" dans la barre latérale
+    2. Sélectionnez les actifs qui vous intéressent
+    3. Cliquez sur "Collecter les données"
+
+    Les données seront automatiquement mises à jour et utilisées pour l'optimisation du portefeuille.
     """)
 
 # Sidebar pour les paramètres
