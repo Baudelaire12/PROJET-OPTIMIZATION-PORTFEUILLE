@@ -3,6 +3,14 @@ Point d'entrée pour Streamlit Cloud.
 Ce fichier collecte des données réelles via Yahoo Finance avant de lancer l'application.
 """
 import streamlit as st
+
+# Configuration de la page - DOIT être appelé en premier
+st.set_page_config(
+    page_title="Optimisation de Portefeuille",
+    page_icon="📈",
+    layout="wide"
+)
+
 import sys
 import os
 import pandas as pd

@@ -18,12 +18,12 @@ from simple_portfolio import (
     optimize_portfolio
 )
 
-# Configuration de la page
-st.set_page_config(
-    page_title="Optimisation de Portefeuille",
-    page_icon="📈",
-    layout="wide"
-)
+# Configuration de la page (commenté car maintenant appelé dans streamlit_app.py)
+# st.set_page_config(
+#     page_title="Optimisation de Portefeuille",
+#     page_icon="📈",
+#     layout="wide"
+# )
 
 # Titre et description
 st.title("📊 Optimisation de Portefeuille d'Investissement")
