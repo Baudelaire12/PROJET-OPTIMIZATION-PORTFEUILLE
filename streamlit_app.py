@@ -110,11 +110,17 @@ def collect_real_data():
                     return False
 
                 # Sauvegarder les données brutes
-                all_data.reset_index().to_csv('data/raw/stock_data.csv', index=False)
+                all_data_reset = all_data.reset_index()
+                all_data_reset.to_csv('data/raw/stock_data.csv', index=False)
 
                 # Prétraiter les données
                 # Pivoter les données pour avoir les tickers en colonnes
-                pivot_data = all_data.pivot(index='Date', columns='Ticker', values='Close')
+                # Vérifier si 'Date' est une colonne ou un index
+                if 'Date' in all_data.columns:
+                    pivot_data = all_data.pivot(index='Date', columns='Ticker', values='Close')
+                else:
+                    # Si 'Date' est l'index, on peut utiliser unstack directement
+                    pivot_data = all_data['Close'].unstack('Ticker')
 
                 # Calculer les rendements journaliers
                 returns = pivot_data.pct_change().dropna()
