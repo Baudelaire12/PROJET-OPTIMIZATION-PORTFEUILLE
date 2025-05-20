@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Optimisation de Portefeuille d'Investissement</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        h1 {
+            color: #2c3e50;
+        }
+        h2 {
+            color: #3498db;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        .feature {
+            margin-bottom: 30px;
+        }
+        .feature h3 {
+            color: #2980b9;
+        }
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #7f8c8d;
+        }
+        .cta {
+            background-color: #3498db;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            display: inline-block;
+            margin-top: 20px;
+        }
+        .cta:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Optimisation de Portefeuille d'Investissement</h1>
+        <p>Un projet combinant la Théorie Moderne du Portefeuille et l'apprentissage automatique pour optimiser les investissements</p>
+        <a href="https://github.com/Baudelaire12/PROJET-OPTIMIZATION-PORTFEUILLE" class="cta">Voir sur GitHub</a>
+    </header>
+
+    <main>
+        <section>
+            <h2>À propos du projet</h2>
+            <p>
+                Ce projet vise à optimiser un portefeuille d'investissement en combinant la Théorie Moderne du Portefeuille (MPT) 
+                de Markowitz et des modèles d'apprentissage automatique. Il utilise des données historiques de Yahoo Finance 
+                pour prédire les rendements et minimiser les risques.
+            </p>
+        </section>
+
+        <section>
+            <h2>Fonctionnalités principales</h2>
+            
+            <div class="feature">
+                <h3>Collecte de données réelles</h3>
+                <p>Récupération de données financières via l'API Yahoo Finance avec gestion robuste des erreurs et des données manquantes.</p>
+            </div>
+            
+            <div class="feature">
+                <h3>Optimisation de portefeuille</h3>
+                <p>Implémentation de l'algorithme d'optimisation de Markowitz pour trouver le portefeuille optimal sur la frontière efficiente.</p>
+            </div>
+            
+            <div class="feature">
+                <h3>Modèles d'apprentissage automatique</h3>
+                <p>Utilisation de modèles ML pour prédire les rendements futurs et améliorer l'allocation d'actifs.</p>
+            </div>
+            
+            <div class="feature">
+                <h3>Tableau de bord interactif</h3>
+                <p>Interface utilisateur interactive avec Streamlit pour visualiser et analyser les résultats d'optimisation.</p>
+            </div>
+        </section>
+
+        <section>
+            <h2>Comment démarrer</h2>
+            <p>Pour commencer à utiliser ce projet :</p>
+            <ol>
+                <li>Clonez le dépôt GitHub</li>
+                <li>Installez les dépendances avec <code>pip install -r requirements.txt</code></li>
+                <li>Collectez des données réelles avec <code>python collect_real_data.py</code></li>
+                <li>Lancez l'application Streamlit avec <code>python run_dashboard.py</code></li>
+            </ol>
+        </section>
+    </main>
+
+    <footer>
+        <p>Projet développé par <a href="https://github.com/Baudelaire12">Baudelaire12</a> | Sous licence MIT</p>
+    </footer>
+</body>
+</html>
