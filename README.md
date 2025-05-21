@@ -9,6 +9,14 @@
 ## Description
 Ce projet optimise un portefeuille d'investissement en combinant la Théorie Moderne du Portefeuille (MPT) et des modèles d'apprentissage automatique. Il utilise des données historiques de Yahoo Finance pour prédire les rendements et minimiser les risques.
 
+## 🆕 Mise à jour : Collecte de données réelles
+Cette version inclut une fonctionnalité améliorée de collecte de données réelles depuis Yahoo Finance :
+- Téléchargement automatique des données historiques pour 20 actions et indices majeurs
+- Prétraitement des données pour calculer les rendements journaliers
+- Gestion robuste des erreurs et des tentatives multiples
+- Interface utilisateur Streamlit pour la collecte et la visualisation des données
+- Optimisation de portefeuille basée sur des données réelles actualisées
+
 ## Fonctionnalités
 - Collecte de données financières réelles via Yahoo Finance API
 - Prétraitement et analyse exploratoire des données
@@ -148,6 +156,17 @@ python collect_real_data.py --start-date 2020-01-01 --end-date 2023-12-31
 # Collecter des données pour les 3 dernières années
 python collect_real_data.py --years 3
 ```
+
+Vous pouvez également utiliser l'interface Streamlit pour collecter des données réelles :
+```bash
+# Lancer l'application Streamlit avec collecte de données intégrée
+streamlit run streamlit_app.py
+```
+Cette interface vous permet de :
+- Sélectionner les actions et indices à analyser
+- Définir la période d'analyse
+- Visualiser les données collectées
+- Optimiser votre portefeuille en temps réel
 
 ### Lancement de l'application Streamlit
 ```bash
